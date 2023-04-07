@@ -1,0 +1,21 @@
+name: Подключение к Openvpn-серверу
+description: Информирующее правило. Обнаруживает подключение санкционированных пользователей к VPN-серверу
+type: list
+index: logstash-openvpn
+content:
+  query:
+    bool:
+      must:
+      - bool:
+          should:
+          - terms:
+              source.user:
+              - tanya_client
+              - maxim_client
+              - marin_laptop
+              - nekrasov
+      - wildcard:
+          message: "*Outgoing*"
+      - range:
+          "@timestamp":
+            gt: now-1m

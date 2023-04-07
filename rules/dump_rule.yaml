@@ -1,0 +1,17 @@
+name: Создание файлов с расширением .dmp (Windows)
+description: Обнаруживает создание дампов
+type: list
+index: logstash-winlogbeat
+content:
+  query:
+    bool:
+      must:
+      - bool:
+          must:
+          - term:
+              event.code: 11
+          - wildcard:
+              winlog.event_data.TargetFilename: "*.dmp"
+      - range:
+          "@timestamp":
+            gt: now-1m

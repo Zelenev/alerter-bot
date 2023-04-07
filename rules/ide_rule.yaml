@@ -1,0 +1,34 @@
+name: Использование IDE (Windows)
+description: Обнаруживает признаки работы IDE на Windows
+type: list
+index: logstash-winlogbeat
+content:
+  query:
+    bool:
+      must:
+      - bool:
+          should:
+          - wildcard:
+              winlog.event_data.Image: "*python*"
+          - wildcard:
+              winlog.event_data.Image: "*code*"
+          - wildcard:
+              winlog.event_data.Image: "*VS Code*"
+          - wildcard:
+              winlog.event_data.Image: "*vsce-sign*"
+          - wildcard:
+              winlog.event_data.Image: "*fsnotifier*"
+          - wildcard:
+              winlog.event_data.Image: "*pycharm*"
+          - wildcard:
+              winlog.event_data.Image: "*idea*"
+          - wildcard:
+              winlog.event_data.Image: "*visual studio*"
+          must_not:
+          - terms:
+              winlog.event_data.DestinationIp:
+              - 178.20.43.177
+              - 149.154.167.220
+      - range:
+          "@timestamp":
+            gt: now-1m

@@ -1,0 +1,20 @@
+name: Сетевое подключение с внешнего IP-адреса по RDP
+description: Обнаруживает события типа network connection, где источником является внешний IP-адрес на порт RDP
+content:
+  query:
+    bool:
+      must:
+      - bool:
+          must:
+          - term:
+              event.code: 3
+          - term:
+              winlog.event_data.DestinationIp: 192.168.0.0/24
+          - term:
+              winlog.event_data.DestinationPort: 3389
+          must_not:
+          - term:
+              winlog.event_data.SourceIp: 192.168.0.0/24
+      - range:
+          "@timestamp":
+            gt: now-1m   

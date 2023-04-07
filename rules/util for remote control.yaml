@@ -1,0 +1,17 @@
+name: Использование утилит для удаленного управления (Windows)
+description: Обнаруживает признаки работы средств удаленного управления на Windows
+type: list
+index: logstash-winlogbeat
+content:
+  query:
+    bool:
+      must:
+      - bool:
+          should:
+          - wildcard:
+              winlog.event_data.Image: "*putty*"
+          - wildcard:
+              winlog.event_data.Image: "*xshell*"
+      - range:
+          "@timestamp":
+            gt: now-1m
